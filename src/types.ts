@@ -1,4 +1,5 @@
 export type Channel = {
+  [key: string]: any;
   title: string;
   link: string;
   description: string;
@@ -23,6 +24,7 @@ export type Channel = {
 };
 
 export type Item = {
+  [key: string]: any;
   title?: string;
   link?: string;
   description?: string;
@@ -43,9 +45,14 @@ export type Item = {
 };
 
 export type Enclosure = {
+  [key: string]: any;
   url: string;
   length: number;
   type: string;
+};
+
+export type UnknownObject<T extends object> = {
+  [P in keyof T]: unknown;
 };
 
 // export type URL = {
