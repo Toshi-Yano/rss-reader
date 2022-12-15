@@ -17,6 +17,8 @@ export class WordsExcluder implements Convertable {
   }
 
   convertFromArray(values: string[]) {
-    return values.filter((v) => !this.excludedWordsRegex.test(v));
+    return values.filter(
+      (v) => !this.excludedWordsRegex.test(v) || URL_REGEX.test(v),
+    );
   }
 }
