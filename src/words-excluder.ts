@@ -20,6 +20,6 @@ export class WordsExcluder implements Convertable {
   }
 
   convertFromArray(values: string[]) {
-    return values.map((v) => this.convertFromString(v));
+    return values.filter((v) => !this.excludedWordsRegex.test(v));
   }
 }
