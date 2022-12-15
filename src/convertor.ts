@@ -4,27 +4,19 @@ import { Channel, Enclosure, Item } from './types';
 export class Convertor {
   constructor(private convertors: ReadonlyArray<Convertable>) {}
 
+  /**
+   * channelから再帰処理を開始する
+   * @param channel RSS：Channel
+   */
   executes(channel: Channel) {
     this.mightConvertRecursively(channel);
-    // console.log('--------------------------');
-    // console.log({ channel });
-    // const item: Item = channel.items[0];
-    // console.log('--------------------------');
-    // console.log({ item });
-
-    // console.log('-------------------------');
-    // let count = 0;
-    // for (let i = 0; i < 2; i++) {
-    //   console.log(channel.items[i]);
-    // }
-    // channel.items.forEach((item) => {
-    //   console.log(item);
-    // });
-
-    // console.log('--------------------------');
-    // this.iterateElementInArray(channel.items, channel, 'items');
   }
 
+  /**
+   * RSSの各要素に対して再帰的に値を探索し、convertorsによる変換処理を行う
+   * @param element RSS：Channel | Item | Enclosure
+   * @returns       void
+   */
   mightConvertRecursively(element: Channel | Item | Enclosure) {
     if (element === undefined || element === null) return;
 
@@ -32,64 +24,51 @@ export class Convertor {
       if (typeof value === 'string') {
         element[key] = this.useAllConvertor(value);
       } else if (Array.isArray(value)) {
-        this.iterateElementInArray(value, element, key);
+        this.tryConvertValuesInArray(element, key, value);
       } else {
         this.mightConvertRecursively(value);
       }
     }
   }
 
-  iterateElementInArray(
-    value: Array<string | object>,
-    element: Channel | Item | Enclosure,
+  /**
+   * 配列内の値を変換 or 配列内のobjectをmightConvertRecursively()で再探索する
+   * @param element RSS：Channel | Item
+   * @param key     プロパティ名
+   * @param value   配列型の値（Item・Item.categoryなどを想定）
+   * @returns       void
+   */
+  tryConvertValuesInArray(
+    element: Channel | Item,
     key: string,
+    value: Array<string | object>,
   ) {
-    // console.log(`${key} : ${value} : ${typeof value[0]}`);
-    // if (key === 'items') {
-    //   console.log(`${value} : ${typeof value[0]}`);
-    //   console.log(Array.isArray(value));
-    // }
-
     if (value.length === 0) return;
-    // if (typeof value[0] !== 'string') this.mightConvertRecursively(value);
+
+    // 配列の中身がstring以外 = objectの場合は再帰処理を実行（Item[]を想定）
     if (typeof value[0] !== 'string') {
       value.forEach((v) => {
         this.mightConvertRecursively(v as Item);
       });
       return;
-      // if (key === 'items') {
-      //   console.log('fdjkafjalk;');
-      //   // element[key] =
-      //   value.forEach((v) => {
-      //     this.mightConvertRecursively(v as Item);
-      //   });
-      //   return;
-      // }
-      // this.mightConvertRecursively(value);
     }
 
+    // その他はstring[]のため型ガードで宣言の後、変換処理を実行
     const stringArray = value.filter((v) => typeof v === 'string') as string[];
-    // console.log(stringArray);
-
     element[key] = this.useAllConvertor(stringArray);
   }
 
-  useAllConvertor(arg: string | string[]) {
-    let result = arg;
+  /**
+   * 引数の型に合わせて全convertorsによる変換処理を実行する
+   * @param target 変換対象の値 or 変換対象の値を含む配列
+   * @returns      変換後の値 or 変換後の値を含む配列
+   */
+  useAllConvertor(target: string | string[]) {
+    let result = target;
     this.convertors.forEach((convertor) => {
       result = Array.isArray(result)
         ? (convertor.convertFromArray(result) as string[])
         : (convertor.convertFromString(result) as string);
-
-      // let value = typeof arg === 'string' ? (arg as string) : (arg as string[]);
-      // if (typeof arg === 'string') {
-      //   // const newValue = value as string;
-      //   // convertor.convertFromString(newValue);
-      //   convertor.convertFromString(value);
-      // } else if (Array.isArray(arg)) {
-      //   const newValue = value as string[];
-      //   convertor.convertFromArray(newValue);
-      // }
     });
     return result;
   }
