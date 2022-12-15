@@ -1,20 +1,17 @@
 import { Convertable } from './interfaces';
 
-export class WordsExcluder implements Convertable {
-  private static readonly urlRegex =
-    /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+const URL_REGEX =
+  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 
+export class WordsExcluder implements Convertable {
   private readonly excludedWordsRegex: RegExp;
   constructor(private words: ReadonlyArray<string>) {
-    this.excludedWordsRegex = new RegExp(`(${this.words.join('|')})`, 'gi');
+    this.excludedWordsRegex = new RegExp(`(${this.words.join('|')})`, 'g');
   }
 
   convertFromString(value: string) {
-    if (!this.excludedWordsRegex.test(value)) {
+    if (URL_REGEX.test(value)) {
       return value;
-    }
-    if (WordsExcluder.urlRegex.test(value)) {
-      return '';
     }
     return value.replaceAll(this.excludedWordsRegex, '');
   }
