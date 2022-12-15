@@ -1,14 +1,22 @@
 import { Convertable } from './interfaces';
 
 export class WordsExcluder implements Convertable {
-  regExp1: RegExp;
+  private static readonly urlRegex =
+    /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+
+  private readonly excludedWordsRegex: RegExp;
   constructor(private words: ReadonlyArray<string>) {
-    this.regExp1 = new RegExp(`\\b(${this.words.join('|')})\\b`, 'g');
+    this.excludedWordsRegex = new RegExp(`(${this.words.join('|')})`, 'gi');
   }
 
   convertFromString(value: string) {
-    // url, guid → isPermaLinkがtrueならurl、それ以外なら削除してOK?
-    return value.replace(this.regExp1, '');
+    if (!this.excludedWordsRegex.test(value)) {
+      return value;
+    }
+    if (WordsExcluder.urlRegex.test(value)) {
+      return '';
+    }
+    return value.replaceAll(this.excludedWordsRegex, '');
   }
 
   convertFromArray(values: string[]) {
