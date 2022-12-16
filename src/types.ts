@@ -1,4 +1,4 @@
-// RSSのみ、Atomは非考慮
+// （ATOMを除く）RSS要素のみ明示的に記載
 export type Channel = {
   [key: string]: any;
   title: string;
@@ -23,7 +23,7 @@ export type Channel = {
   categories?: string[];
 };
 
-// RSSのみ、Atomは非考慮
+// （ATOMを除く）RSS要素のみ明示的に記載
 export type Item = {
   [key: string]: any;
   title?: string;
