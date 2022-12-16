@@ -5,9 +5,11 @@ const URL_REGEX =
 
 export class WordsExcluder implements Convertable {
   private readonly excludedWordsRegex: RegExp;
+  private readonly excludedWordsRegexByGlobal: RegExp;
   constructor(private words: ReadonlyArray<string>) {
-    // 単語の区切りを無視したグローバルサーチ
-    this.excludedWordsRegex = new RegExp(`(${this.words.join('|')})`, 'g');
+    const jointWords = this.words.join('|');
+    this.excludedWordsRegex = new RegExp(`(${jointWords})`);
+    this.excludedWordsRegexByGlobal = new RegExp(`(${jointWords})`, 'g');
   }
 
   /**
@@ -19,11 +21,12 @@ export class WordsExcluder implements Convertable {
     if (URL_REGEX.test(value)) {
       return value;
     }
-    return value.replaceAll(this.excludedWordsRegex, '');
+    return value.replaceAll(this.excludedWordsRegexByGlobal, '');
   }
 
   /**
    * 対象の単語を含む値を取り除いた配列を返却する（URLは処理対象外）
+   * グローバルサーチを行うとlastIndexの増加により意図した結果とならないため、配列に対してはフラグ無しの正規表現を使用
    * 例）valuesが['abc', 'xyz', 'https://example/ab']、 対象の単語が'ab'の場合、['xyz', 'https://example/ab']を返却する
    * @param values 変換検証対象の値を含む配列
    * @returns      対象の単語を含まない値 or 全てのURLを保持する配列
