@@ -7,8 +7,8 @@ const INPUT_URLS = ['https://tech.uzabase.com/rss'];
 // const INPUT_URLS = ['http://www.openspc2.org/RSS/Atom/link/sample.xml'];
 const EXCLUDED_WORDS = ['NewsPicks'];
 
-const readRSS = async (reader: Readable, convertor?: Convertor) => {
-  const feeds = await reader.fetchParsedRSS();
+const readFeeds = async (reader: Readable, convertor?: Convertor) => {
+  const feeds = await reader.fetchParsedFeeds();
   convertor &&
     feeds.forEach((feed) => {
       convertor.executes(feed);
@@ -28,7 +28,7 @@ const readRSS = async (reader: Readable, convertor?: Convertor) => {
     // new WordsExcluder(['SPEEDA', 'ユーザベース', 'uzabase', 'blogs']),
   ]);
 
-  const feeds = await readRSS(reader, convertor);
+  const feeds = await readFeeds(reader, convertor);
   feeds.forEach((feed) => {
     // console.dir(channel, { depth: null });
     // console.log('%o', channel);

@@ -1,7 +1,7 @@
 import { Feed } from './feed';
 
 export interface Readable {
-  fetchParsedRSS(): Promise<Feed[]>;
+  fetchParsedFeeds(): Promise<Feed[]>;
 }
 
 export interface Convertable {

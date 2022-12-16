@@ -8,7 +8,7 @@ export class Reader implements Readable {
 
   constructor(private inputUrls: ReadonlyArray<string>) {
     // rss-parserのOutput, Item型に定義されていない要素を正確な名称で取得するため、customFieldsに定義を追加
-    // 購読するRSSが増え対象項目が増加した際は定義の追加が必要
+    // 取得するフィードが増え、正確な名称が必要な項目が増加した際は定義の追加が必要
     this.parser = new Parser({
       customFields: {
         feed: ['lastBuildDate', 'docs', 'generator'],
@@ -18,10 +18,10 @@ export class Reader implements Readable {
   }
 
   /**
-   * 対象の全URLからRSSを取得し、Feedインスタンスとして返却する
+   * 対象の全URLからフィードを取得し、Feedインスタンスとして返却する
    * @returns Feedインスタンスの配列
    */
-  async fetchParsedRSS() {
+  async fetchParsedFeeds() {
     const feeds: Feed[] = [];
     for (const url of this.inputUrls) {
       feeds.push(new Feed(await this.parser.parseURL(url)));

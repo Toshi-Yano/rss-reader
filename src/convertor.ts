@@ -14,8 +14,8 @@ export class Convertor {
   }
 
   /**
-   * RSSの各要素に対して再帰的に値を探索し、convertorsによる変換処理を行う
-   * @param element RSS：Channel | Item | Enclosure
+   * フィードの各要素に対して再帰的に値を探索し、convertorsによる変換処理を行う
+   * @param element フィード：Channel | Item | Enclosure
    * @returns       void
    */
   mightConvertRecursively(element: Channel | Item | Enclosure) {
@@ -34,7 +34,7 @@ export class Convertor {
 
   /**
    * 配列内の値を変換 or 配列内のobjectをmightConvertRecursively()で再探索する
-   * @param element RSS：Channel | Item
+   * @param element フィード：Channel | Item
    * @param key     プロパティ名
    * @param value   配列型の値（Item・Item.categoryなどを想定）
    * @returns       void
