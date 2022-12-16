@@ -1,11 +1,12 @@
 import Parser from 'rss-parser';
+import { Feed } from './feed';
 import { Readable } from './interfaces';
 import { Channel, Item } from './types';
 
 export class Reader implements Readable {
   private readonly parser: Parser<Channel, Item>;
 
-  constructor(private subscribeUrls: ReadonlyArray<string>) {
+  constructor(private inputUrls: ReadonlyArray<string>) {
     // rss-parserのOutput, Item型に定義されていない要素を正確な名称で取得するため、customFieldsに定義を追加
     // 購読するRSSが増え対象項目が増加した際は定義の追加が必要
     this.parser = new Parser({
@@ -17,14 +18,14 @@ export class Reader implements Readable {
   }
 
   /**
-   * 対象URLからRSSを取得し、Channel[]型へ変換して返却する
-   * @returns 全てのURLを元に取得した、Itemを子に持つChannel
+   * 対象の全URLからRSSを取得し、Feedインスタンスとして返却する
+   * @returns Feedインスタンスの配列
    */
   async fetchParsedRSS() {
-    const channels: Channel[] = [];
-    for (const url of this.subscribeUrls) {
-      channels.push(await this.parser.parseURL(url));
+    const feeds: Feed[] = [];
+    for (const url of this.inputUrls) {
+      feeds.push(new Feed(await this.parser.parseURL(url)));
     }
-    return channels;
+    return feeds;
   }
 }

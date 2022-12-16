@@ -8,36 +8,39 @@ const INPUT_URLS = ['https://tech.uzabase.com/rss'];
 const EXCLUDED_WORDS = ['NewsPicks'];
 
 const readRSS = async (reader: Readable, convertor?: Convertor) => {
-  const channels = await reader.fetchParsedRSS();
+  const feeds = await reader.fetchParsedRSS();
   convertor &&
-    channels.forEach((channel) => {
-      convertor.executes(channel);
+    feeds.forEach((feed) => {
+      convertor.executes(feed);
     });
-  return channels;
+  return feeds;
 };
 
 (async () => {
   const reader = new Reader(INPUT_URLS);
   const convertor = new Convertor([
     new WordsExcluder(EXCLUDED_WORDS),
-    // new WordsExcluder(['tatsuhiro_hori']),
+    // new WordsExcluder(['Podcast']),
+    // new WordsExcluder(['専任エンジニアリングマネージャ']),
     // new WordsExcluder(['Blog']),
+    // new WordsExcluder(['Uzabase']),
     // new WordsExcluder(['uzabase']),
     // new WordsExcluder(['SPEEDA', 'ユーザベース', 'uzabase', 'blogs']),
   ]);
 
-  const channels = await readRSS(reader, convertor);
-  channels.forEach((channel) => {
+  const feeds = await readRSS(reader, convertor);
+  feeds.forEach((feed) => {
     // console.dir(channel, { depth: null });
     // console.log('%o', channel);
     // console.log(channel);
     // console.log(...describe());
-    // console.log(channel);
-    // for (const [key, value] of Object.entries(channel)) {
-    //   if (key === 'items') {
-    //     console.log(`${key} : ${value[0]}`);
-    //     console.log(value[0]);
-    //   }
-    // }
+
+    for (const [key, value] of Object.entries(feed.channel)) {
+      if (key !== 'items') {
+        console.log(`${key} : ${value}`);
+      } else {
+        console.log(value[0]);
+      }
+    }
   });
 })();

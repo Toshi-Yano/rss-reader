@@ -1,7 +1,7 @@
-import { Channel } from './types';
+import { Feed } from './feed';
 
 export interface Readable {
-  fetchParsedRSS(): Promise<Channel[]>;
+  fetchParsedRSS(): Promise<Feed[]>;
 }
 
 export interface Convertable {
