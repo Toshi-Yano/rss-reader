@@ -1,35 +1,43 @@
+import { Readable } from './interfaces';
 import { Reader } from './reader';
-import { WordsExcluder } from './words-excluder';
-import { RSSReader, Consumer } from './interfaces';
 import { Convertor } from './convertor';
+import { WordsExcluder } from './words-excluder';
 
-const subscribeUrls = ['https://tech.uzabase.com/rss'];
-// const subscribeUrls = ['http://www.openspc2.org/RSS/Atom/link/sample.xml'];
-const excludeWords = ['NewsPicks'];
+const INPUT_URLS = ['https://tech.uzabase.com/rss'];
+// const INPUT_URLS = ['http://www.openspc2.org/RSS/Atom/link/sample.xml'];
+const EXCLUDED_WORDS = ['NewsPicks'];
 
-const readRSS = async (
-  reader: RSSReader,
-  convertor?: Convertor,
-  consumer?: Consumer,
-) => {
-  const channels = await reader.loadParsedRSS();
-  // console.log({ channels });
+const readRSS = async (reader: Readable, convertor?: Convertor) => {
+  const channels = await reader.fetchParsedRSS();
   convertor &&
     channels.forEach((channel) => {
       convertor.executes(channel);
-      // consumer?.();
     });
+  return channels;
 };
 
-const readRSSFromURLs = async (urls: ReadonlyArray<string>) => {
-  const reader = new Reader(urls);
+(async () => {
+  const reader = new Reader(INPUT_URLS);
   const convertor = new Convertor([
-    new WordsExcluder(excludeWords),
+    new WordsExcluder(EXCLUDED_WORDS),
+    // new WordsExcluder(['tatsuhiro_hori']),
+    // new WordsExcluder(['Blog']),
+    // new WordsExcluder(['uzabase']),
     // new WordsExcluder(['SPEEDA', 'ユーザベース', 'uzabase', 'blogs']),
   ]);
-  // const consumer = new Consumer([new StdOuter()]);
 
-  readRSS(reader, convertor);
-};
-
-readRSSFromURLs(subscribeUrls);
+  const channels = await readRSS(reader, convertor);
+  channels.forEach((channel) => {
+    // console.dir(channel, { depth: null });
+    // console.log('%o', channel);
+    // console.log(channel);
+    // console.log(...describe());
+    // console.log(channel);
+    // for (const [key, value] of Object.entries(channel)) {
+    //   if (key === 'items') {
+    //     console.log(`${key} : ${value[0]}`);
+    //     console.log(value[0]);
+    //   }
+    // }
+  });
+})();

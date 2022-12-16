@@ -1,8 +1,8 @@
 import Parser from 'rss-parser';
-import { RSSReader } from './interfaces';
+import { Readable } from './interfaces';
 import { Channel, Item } from './types';
 
-export class Reader implements RSSReader {
+export class Reader implements Readable {
   private readonly parser: Parser<Channel, Item>;
 
   constructor(private subscribeUrls: ReadonlyArray<string>) {
@@ -20,10 +20,10 @@ export class Reader implements RSSReader {
    * 対象URLからRSSを取得し、Channel[]型へ変換して返却する
    * @returns 全てのURLを元に取得した、Itemを子に持つChannel
    */
-  async loadParsedRSS() {
+  async fetchParsedRSS() {
     const channels: Channel[] = [];
     for (const url of this.subscribeUrls) {
-      channels.push((await this.parser.parseURL(url)) as Channel);
+      channels.push(await this.parser.parseURL(url));
     }
     return channels;
   }
