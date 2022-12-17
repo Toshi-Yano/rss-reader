@@ -7,10 +7,10 @@ export class Convertor {
 
   /**
    * Feedインタンスのchannelから再帰処理を開始する
-   * @param feed Feedインタンス
+   * @param channel フィード：Channel要素
    */
-  executes(feed: Feed) {
-    this.mightConvertRecursively(feed.channel);
+  executes(channel: Channel) {
+    this.mightConvertRecursively(channel);
   }
 
   /**
