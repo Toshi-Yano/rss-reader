@@ -1,20 +1,21 @@
 import { Channel } from './types';
 
 const MAX_TEXT_LENGTH_PER_ROW = 80;
-const DELIMITER_LINE_1 = '='.repeat(MAX_TEXT_LENGTH_PER_ROW);
-const DELIMITER_LINE_2 = '-'.repeat(MAX_TEXT_LENGTH_PER_ROW);
+const DELIMITER_LINE_DOUBLE = '='.repeat(MAX_TEXT_LENGTH_PER_ROW);
+const DELIMITER_LINE_SINGLE = '-'.repeat(MAX_TEXT_LENGTH_PER_ROW);
 
 export class Feed {
   constructor(public channel: Channel) {}
 
   describe() {
-    const displayValueArray = [
-      DELIMITER_LINE_1,
+    const displayValues = [
+      DELIMITER_LINE_DOUBLE,
       ...this.getChannelFields(),
+      DELIMITER_LINE_DOUBLE,
       ...this.getItemsFields(),
     ];
 
-    return displayValueArray.join('\n');
+    return displayValues.join('\n');
   }
 
   private getChannelFields() {
@@ -24,13 +25,19 @@ export class Feed {
   private getItemsFields() {
     return this.channel.items.map((item) =>
       [
-        DELIMITER_LINE_2,
         item.link,
-        item.pubDate,
+        this.formateDate(item.pubDate),
         item.title,
-        item.categories?.join(' / '),
+        item.categories?.join(' | '),
         item.description,
+        DELIMITER_LINE_SINGLE,
       ].join('\n'),
     );
+  }
+
+  private formateDate(dateStr: string | undefined) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   }
 }
