@@ -2,6 +2,7 @@ import Parser from 'rss-parser';
 import { Feed } from './feed';
 import { Readable } from './interfaces';
 import { Channel, Item } from './types';
+import { FEED_CUSTOM_FIELDS, ITEM_CUSTOM_FIELDS } from './app-config';
 
 export class Reader implements Readable<Feed> {
   private readonly parser: Parser<Channel, Item>;
@@ -11,8 +12,8 @@ export class Reader implements Readable<Feed> {
     // 取得するフィードが増え、正確な名称が要する項目が増加した際は定義の追加が必要
     this.parser = new Parser({
       customFields: {
-        feed: ['lastBuildDate', 'docs', 'generator'],
-        item: ['description'],
+        feed: FEED_CUSTOM_FIELDS,
+        item: ITEM_CUSTOM_FIELDS,
       },
     });
   }

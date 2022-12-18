@@ -5,9 +5,14 @@ import { Convertor } from './convertor';
 import { WordsExcluder } from './words-excluder';
 import { Feed } from './feed';
 import { Readable } from './interfaces';
+import { EXCLUDED_WORDS } from './app-config';
 
-const EXCLUDED_WORDS = ['NewsPicks'];
-
+/**
+ *
+ * @param reader Readableインターフェースを実装したインスタンス
+ * @param convertor Convertableインターフェースを実装したインスタンス
+ * @returns フェードインスタンスのPromise配列
+ */
 const readFeeds = async (reader: Readable<Feed>, convertor?: Convertor) => {
   const feeds = await reader.fetchParsedFeeds();
   convertor &&
