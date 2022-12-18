@@ -1,8 +1,8 @@
 import { Channel } from './types';
 
 const MAX_TEXT_LENGTH_PER_ROW = 80;
-const DELIMITER_LINE_DOUBLE = '='.repeat(MAX_TEXT_LENGTH_PER_ROW);
-const DELIMITER_LINE_SINGLE = '-'.repeat(MAX_TEXT_LENGTH_PER_ROW);
+const DELIMITER_LINE_DOUBLE = '='.repeat(MAX_TEXT_LENGTH_PER_ROW * 2);
+const DELIMITER_LINE_SINGLE = '-'.repeat(MAX_TEXT_LENGTH_PER_ROW * 2);
 
 export class Feed {
   constructor(public channel: Channel) {}
@@ -27,7 +27,11 @@ export class Feed {
    * @returns Channel要素の出力対象文字列が格納された配列
    */
   private getChannelFields() {
-    return [this.channel.link, this.channel.title, this.channel.description];
+    return [
+      this.channel.link,
+      this.insertLineBreaks(this.channel.title),
+      this.insertLineBreaks(this.channel.description),
+    ];
   }
 
   /**
@@ -39,12 +43,27 @@ export class Feed {
       [
         item.link,
         this.formateDate(item.pubDate),
-        item.title,
+        this.insertLineBreaks(item.title),
         item.categories?.join(' | '),
-        item.description,
+        this.insertLineBreaks(item.description),
         DELIMITER_LINE_SINGLE,
       ].join('\n'),
     );
+  }
+
+  /**
+   * MAX_TEXT_LENGTH_PER_ROW毎に文字列に改行を挿入して返却する
+   * @param value 改行挿入対象の文字列
+   * @returns     改行後の文字列
+   */
+  private insertLineBreaks(value: string | undefined) {
+    if (value === undefined || value === null) return '';
+    return value.split('').reduce((prev, curr, index) => {
+      if (index % MAX_TEXT_LENGTH_PER_ROW === 0 && index !== 0) {
+        return prev + '\n' + curr;
+      }
+      return prev + curr;
+    }, '');
   }
 
   /**
