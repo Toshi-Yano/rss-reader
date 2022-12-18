@@ -11,7 +11,7 @@ const readFeeds = async (reader: Readable, convertor?: Convertor) => {
   const feeds = await reader.fetchParsedFeeds();
   convertor &&
     feeds.forEach((feed) => {
-      convertor.executes(feed);
+      convertor.executes(feed.channel);
     });
   return feeds;
 };
@@ -20,27 +20,10 @@ const readFeeds = async (reader: Readable, convertor?: Convertor) => {
   const reader = new Reader(INPUT_URLS);
   const convertor = new Convertor([
     new WordsExcluder(EXCLUDED_WORDS),
-    // new WordsExcluder(['Podcast']),
-    // new WordsExcluder(['専任エンジニアリングマネージャ']),
-    // new WordsExcluder(['Blog']),
-    // new WordsExcluder(['Uzabase']),
-    // new WordsExcluder(['uzabase']),
-    // new WordsExcluder(['SPEEDA', 'ユーザベース', 'uzabase', 'blogs']),
+    // new WordsExcluder(['Blog', 'github', '開発']),
   ]);
-
   const feeds = await readFeeds(reader, convertor);
   feeds.forEach((feed) => {
-    // console.dir(channel, { depth: null });
-    // console.log('%o', channel);
-    // console.log(channel);
-    // console.log(...describe());
-
-    for (const [key, value] of Object.entries(feed.channel)) {
-      if (key !== 'items') {
-        console.log(`${key} : ${value}`);
-      } else {
-        console.log(value[0]);
-      }
-    }
+    console.log(feed.describe());
   });
 })();
