@@ -2,6 +2,9 @@ import { Convertable } from './interfaces';
 import { Channel, Enclosure, Item } from './types';
 
 export class Convertor {
+  /**
+   * @param convertors Channel・Item・Enclosure要素に対して行う変換処理を実装したインスタンスの配列
+   */
   constructor(private convertors: ReadonlyArray<Convertable>) {}
 
   /**

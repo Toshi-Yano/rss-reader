@@ -4,12 +4,18 @@ const URL_REGEX =
   /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 
 export class WordsExcluder implements Convertable {
-  private readonly excludedWordsRegex: RegExp;
   private readonly excludedWordsRegexByGlobal: RegExp;
+  private readonly excludedWordsRegex: RegExp;
+
+  /**
+   * 単語配列からRegExpインスタンスを生成する
+   * string・string[]に対して使い分けるため、グローバルフラグ有り・フラグ無しの2種類を生成 ※convertFromArray()のコメント参照
+   * @param words 除外する対象の単語配列
+   */
   constructor(private words: ReadonlyArray<string>) {
     const jointWords = this.words.join('|');
-    this.excludedWordsRegex = new RegExp(`(${jointWords})`);
     this.excludedWordsRegexByGlobal = new RegExp(`(${jointWords})`, 'g');
+    this.excludedWordsRegex = new RegExp(`(${jointWords})`);
   }
 
   /**
