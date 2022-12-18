@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon dist/app.js",
+    "start": "nodemon dist/index.js",
     "format": "prettier --write 'src/**/*.{js,ts,json}'",
     "lint": "npm-run-all eslint check-types",
     "lint:fix": "npm-run-all eslint:fix check-types format"
