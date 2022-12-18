@@ -2,7 +2,7 @@ import Parser from 'rss-parser';
 import { Feed } from './feed';
 import { Readable } from './interfaces';
 import { Channel, Item } from './types';
-import { FEED_CUSTOM_FIELDS, ITEM_CUSTOM_FIELDS } from './app-config';
+import { PARSER_OPTIONS } from './app-config';
 
 export class Reader implements Readable<Feed> {
   private readonly parser: Parser<Channel, Item>;
@@ -15,8 +15,8 @@ export class Reader implements Readable<Feed> {
   constructor(private inputUrls: ReadonlyArray<string>) {
     this.parser = new Parser({
       customFields: {
-        feed: FEED_CUSTOM_FIELDS,
-        item: ITEM_CUSTOM_FIELDS,
+        feed: PARSER_OPTIONS.feedCustomFields,
+        item: PARSER_OPTIONS.itemCustomFields,
       },
     });
   }
