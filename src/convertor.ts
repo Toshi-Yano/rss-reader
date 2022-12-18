@@ -1,5 +1,5 @@
 import { Convertable } from './interfaces';
-import { Channel, Enclosure, Item } from './types';
+import { Channel, Item, Enclosure } from './types';
 
 export class Convertor {
   /**
@@ -56,7 +56,7 @@ export class Convertor {
       return;
     }
 
-    // その他はstring[]のため型ガードで宣言の後、変換処理を実行
+    // その他はstring[]のため型宣言の後、変換処理を実行
     const stringArray = value.filter((v) => typeof v === 'string') as string[];
     element[key] = this.useAllConvertor(stringArray);
   }

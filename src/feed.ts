@@ -8,7 +8,7 @@ export class Feed {
   constructor(public channel: Channel) {}
 
   /**
-   * channel・Itemから出力する要素を抽出し、フォーマットされた文字列で返却する
+   * channel・Itemから出力する要素を抽出し、フォーマットされた文字列型で返却する
    * @returns 出力対象の文字列
    */
   describe() {
@@ -49,7 +49,7 @@ export class Feed {
 
   /**
    * フィードの日付形式をフォーマットして返却する
-   * @param dateStr "Sat, 07 Sep 2002 00:00:01 GMT"形式で日付を表す文字列
+   * @param dateStr "Sat, 07 Sep 2002 00:00:01 GMT"形式の日付を表す文字列
    * @returns       "2002-09-07"形式の文字列
    */
   private formateDate(dateStr: string | undefined) {

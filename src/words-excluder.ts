@@ -9,7 +9,7 @@ export class WordsExcluder implements Convertable {
 
   /**
    * 単語配列からRegExpインスタンスを生成する
-   * string・string[]に対して使い分けるため、グローバルフラグ有り・フラグ無しの2種類を生成 ※convertFromArray()のコメント参照
+   * string・string[]に対して使い分けるため、グローバルフラグ有り・無しの2種類を生成 ※convertFromArray()のコメント参照
    * @param words 除外する対象の単語配列
    */
   constructor(private words: ReadonlyArray<string>) {
@@ -19,7 +19,7 @@ export class WordsExcluder implements Convertable {
   }
 
   /**
-   * URL以外の文字列から、対象の単語を全て除外して返却する
+   * URL以外の文字列から、対象の単語を全て除外して返却する（URLは変換せずそのまま返却）
    * @param value 変換検証対象の値
    * @returns     単語除外後の値
    */
@@ -35,7 +35,7 @@ export class WordsExcluder implements Convertable {
    * グローバルサーチを行うとlastIndexの増加により意図した結果とならないため、配列に対してはフラグ無しの正規表現を使用
    * 例）valuesが['abc', 'xyz', 'https://example/ab']、 対象の単語が'ab'の場合、['xyz', 'https://example/ab']を返却する
    * @param values 変換検証対象の値を含む配列
-   * @returns      対象の単語を含まない値 or 全てのURLを保持する配列
+   * @returns      対象の単語を含まない値 or 全URLを保持する配列
    */
   convertFromArray(values: string[]) {
     return values.filter(
