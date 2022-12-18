@@ -1,4 +1,3 @@
-import { Feed } from './feed';
 import { Convertable } from './interfaces';
 import { Channel, Enclosure, Item } from './types';
 
@@ -6,7 +5,7 @@ export class Convertor {
   constructor(private convertors: ReadonlyArray<Convertable>) {}
 
   /**
-   * Feedインタンスのchannelから再帰処理を開始する
+   * channel要素から再帰処理を開始する
    * @param channel フィード：Channel要素
    */
   executes(channel: Channel) {

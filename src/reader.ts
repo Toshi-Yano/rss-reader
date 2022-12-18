@@ -3,7 +3,7 @@ import { Feed } from './feed';
 import { Readable } from './interfaces';
 import { Channel, Item } from './types';
 
-export class Reader implements Readable {
+export class Reader implements Readable<Feed> {
   private readonly parser: Parser<Channel, Item>;
 
   constructor(private inputUrls: ReadonlyArray<string>) {

@@ -1,7 +1,5 @@
-import { Feed } from './feed';
-
-export interface Readable {
-  fetchParsedFeeds(): Promise<Feed[]>;
+export interface Readable<T> {
+  fetchParsedFeeds(): Promise<T[]>;
 }
 
 export interface Convertable {
