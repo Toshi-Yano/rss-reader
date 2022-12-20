@@ -26,10 +26,10 @@ export class Reader implements Readable<Feed> {
    * @returns Feedインスタンスの配列
    */
   async fetchParsedFeeds() {
-    const feeds: Feed[] = [];
-    for (const url of this.inputUrls) {
-      feeds.push(new Feed(await this.parser.parseURL(url)));
-    }
-    return feeds;
+    const parsedFeedPromises = this.inputUrls.map((url) =>
+      this.parser.parseURL(url),
+    );
+    const parsedFeeds = await Promise.all(parsedFeedPromises);
+    return parsedFeeds.map((result) => new Feed(result));
   }
 }
