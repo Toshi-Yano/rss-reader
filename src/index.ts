@@ -1,5 +1,6 @@
 import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
+import * as fs from 'node:fs';
 import { Reader } from './reader';
 import { Convertor } from './convertor';
 import { WordsExcluder } from './words-excluder';
@@ -38,7 +39,11 @@ const readFeeds = async (reader: Readable<Feed>, convertor?: Convertor) => {
   const feeds = await readFeeds(reader, convertor);
   feeds.forEach((feed) => {
     console.log(feed.describe());
+    fs.writeFile('./feed.txt', feed.describe(), (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
   });
-
   rl.close();
 })();
