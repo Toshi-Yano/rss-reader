@@ -1,3 +1,4 @@
+import { Feed } from './feed';
 import { Convertable } from './interfaces';
 import { Channel, Item, Enclosure } from './types';
 
@@ -8,11 +9,11 @@ export class Convertor {
   constructor(private convertors: ReadonlyArray<Convertable>) {}
 
   /**
-   * channel要素から再帰処理を開始する
-   * @param channel フィード：Channel要素
+   * Feedインタンスのchannelから再帰処理を開始する
+   * @param feed Feedインタンス
    */
-  executes(channel: Channel) {
-    this.mightConvertRecursively(channel);
+  executes(feed: Feed) {
+    this.mightConvertRecursively(feed.channel);
   }
 
   /**
