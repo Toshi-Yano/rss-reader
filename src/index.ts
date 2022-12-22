@@ -39,11 +39,12 @@ const readFeeds = async (reader: Readable<Feed>, convertor?: Convertor) => {
   const feeds = await readFeeds(reader, convertor);
   feeds.forEach((feed) => {
     console.log(feed.describe());
-    fs.writeFile('./feed.txt', feed.describe(), (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
+    try {
+      fs.writeFileSync(`./${feed.channel.title}.txt`, feed.describe());
+      console.log('finish');
+    } catch (error) {
+      console.error(error);
+    }
   });
   rl.close();
 })();
