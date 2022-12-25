@@ -1,12 +1,16 @@
+import { Feed } from './feed';
 import { Consumable } from './interfaces';
-import { Channel } from './types';
 
 export class Consumer {
   constructor(private consumers: ReadonlyArray<Consumable>) {}
 
-  consumeAll(channel: Channel) {
+  /**
+   * Consumableインターフェースを実装したクラスでFeedインスタンスを使用する
+   * @param feed Feedインタンス
+   */
+  executes(feed: Feed) {
     this.consumers.forEach((consumer) => {
-      consumer.use(channel);
+      consumer.use(feed);
     });
   }
 }
