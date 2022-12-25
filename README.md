@@ -9,4 +9,4 @@ RSSフィードを取得・変換して標準出力を行う
 - rss-reader 1.0.0
 
 ## クラス図
-![rss-reader-class-diagram](https://user-images.githubusercontent.com/62419040/208317989-a7d0e49d-af4b-40bd-9b18-72412a05a594.png)
+![rss-reader-class-diagram](https://user-images.githubusercontent.com/62419040/209472153-3d100cd5-032f-4371-bfcd-777b086acd5c.png)
