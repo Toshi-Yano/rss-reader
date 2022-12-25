@@ -45,7 +45,7 @@ export class Feed {
         this.formateDate(item.pubDate),
         this.insertLineBreaks(item.title),
         item.categories?.join(' | '),
-        this.insertLineBreaks(item.description),
+        this.insertLineBreaks(item.contentSnippet),
         DELIMITER_LINE_SINGLE,
       ].join('\n'),
     );
